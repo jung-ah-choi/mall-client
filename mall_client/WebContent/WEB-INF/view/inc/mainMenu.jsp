@@ -23,6 +23,7 @@ if(session.getAttribute("loginClient") == null) {
 		</div>
 		<ul>
 			<li><a href="<%=request.getContextPath()%>/LogoutController">로그아웃</a></li>
+			<li><a href="<%=request.getContextPath()%>/CartListController">장바구니</a></li>
 		</ul>
 	</div>
 <%

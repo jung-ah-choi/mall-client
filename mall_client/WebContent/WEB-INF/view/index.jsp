@@ -18,7 +18,7 @@
 	<%
 		List<Ebook> ebookList = (List<Ebook>)(request.getAttribute("ebookList"));
 	%>
-	<table border=1>
+	<table border="1">
 		<tr>
 		<%
 			int i = 0;

@@ -22,7 +22,7 @@ public class LoginController extends HttpServlet {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
-		//
+		// dao 호출
 		request.setCharacterEncoding("utf-8");
 		String clientEmail = request.getParameter("clientEmail");
 		String clientPw = request.getParameter("clientPw");
@@ -35,6 +35,8 @@ public class LoginController extends HttpServlet {
 		if(returnClient != null) {
 			session.setAttribute("loginClient", returnClient);
 		}
-		response.sendRedirect(request.getContextPath()+"IndextController");
+		
+		// forward
+		response.sendRedirect(request.getContextPath()+"IndexController");
 	}
 }
