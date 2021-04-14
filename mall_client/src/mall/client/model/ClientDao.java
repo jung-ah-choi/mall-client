@@ -7,7 +7,61 @@ import mall.client.vo.Client;
 
 public class ClientDao {
 	private DBUtil dbUtil;
+	
+	// 회원가입 이메일 중복 검사
+	public String selectClientMail(String clientMail) {
+		
+		// 객체 초기화
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		String returnClientMail = null;
+		
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "SELECT client_mail FROM client WHERE client_mail = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, clientMail);
+			rs = stmt.executeQuery();
+			
+			if(rs.next()) {
+				returnClientMail = rs.getString("client_mail");
+			}
+		} catch (Exception e) { // 예외 처리
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, rs);
+		}
+		
+		return returnClientMail;
+	}
+	
+	// 회원가입 (회원 정보 입력)
+	public int insertClient(Client client) {
+		
+		// 변수 및 객체 초기화
+		int rowCnt = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "INSERT client_mail clientMail, client_pw clientPw INTO client";
+			stmt = conn.prepareStatement(sql);
+			stmt.executeUpdate();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, null);
+		}
+		return rowCnt;
+	}
+	
+	// 로그인 정보 가져오는 메소드
 	public Client login(Client client) {
+		
+		// 객체 초기화
 		this.dbUtil = new DBUtil();
 		Client returnClient = null;
 		Connection conn = null;

@@ -5,7 +5,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>cartList</title>
 </head>
 <body>
 	<!-- mainMenu -->
@@ -14,6 +14,7 @@
 	<!-- cartList -->
 	<h1>cartList</h1>
 	<%
+		// 장바구니 목록 받아오기
 		List<Map<String, Object>> cartList = (List<Map<String, Object>>)(request.getAttribute("cartList"));
 	%>
 	<table border="1">
@@ -22,15 +23,14 @@
 			<th>ebookNo</th>
 			<th>ebookTitle</th>
 			<th>cartDate</th>
-		<%
-			int i = 0;
+		<%	
+			// 장바구니 목록 출력
 			for(Map<String, Object> map : cartList) {
-				i += 1;
 		%>
-			<td><%=map.get("cartNo")%></td>
-			<td><%=map.get("ebookNo")%></td>
-			<td><%=map.get("ebookTitle")%></td>
-			<td><%=map.get("cartDate")%></td>
+				<td><%=map.get("cartNo")%></td>
+				<td><%=map.get("ebookNo")%></td>
+				<td><%=map.get("ebookTitle")%></td>
+				<td><%=map.get("cartDate")%></td>
 		<%
 			}
 		%>
