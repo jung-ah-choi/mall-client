@@ -46,8 +46,10 @@ public class ClientDao {
 		PreparedStatement stmt = null;
 		try {
 			conn = this.dbUtil.getConnection();
-			String sql = "INSERT client_mail clientMail, client_pw clientPw INTO client";
+			String sql = "INSERT INTO client(client_mail, client_pw, client_date) VALUES (?,PASSWORD(?),NOW())";
 			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, client.getClientMail());
+			stmt.setString(2, client.getClientPw());
 			stmt.executeUpdate();
 			
 		} catch(Exception e) {
