@@ -7,16 +7,15 @@
 <title>clientOne</title>
 </head>
 <body>
+<%
+	// 형변환
+	Client clientOne = (Client)(request.getAttribute("clientOne"));
+%>	
 	<!-- mainMenu -->
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	
 	<!-- clientOne -->
-	<h1>clientOne</h1>
-	<%
-		// 형변환
-		Client clientOne = (Client)(request.getAttribute("clientOne"));
-	%>
-	
+	<h1>회원정보</h1>
 	<table border="1">
 		<thead>
 			<tr>

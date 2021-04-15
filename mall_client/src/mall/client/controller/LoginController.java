@@ -18,11 +18,12 @@ public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// 로그인 유효성 검사
 		HttpSession session = request.getSession();
-		if(session.getAttribute("loginClient") == null) {
+		if(session.getAttribute("loginClient") != null) {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
-		// dao 호출
+		
+		// 인코딩 및 변수 초기화
 		request.setCharacterEncoding("utf-8");
 		String clientMail = request.getParameter("clientMail");
 		String clientPw = request.getParameter("clientPw");
@@ -30,12 +31,14 @@ public class LoginController extends HttpServlet {
 		client.setClientMail(clientMail);
 		client.setClientPw(clientPw);
 		
+		// dao 호출
 		this.clientDao = new ClientDao();
 		Client returnClient = this.clientDao.login(client);
+		System.out.println(returnClient);
 		if(returnClient != null) {
 			session.setAttribute("loginClient", returnClient);
 		}
 		
-		response.sendRedirect(request.getContextPath()+"IndexController");
+		response.sendRedirect(request.getContextPath()+"/IndexController");
 	}
 }

@@ -20,7 +20,7 @@ public class ClientOneController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// session 검사 (로그인 했는지 안했는지), 로그인 아니면 redirect
 		HttpSession session = request.getSession();
-		if(session.getAttribute("loginClient") != null) {
+		if(session.getAttribute("loginClient") == null) {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
 			return;
 		}
