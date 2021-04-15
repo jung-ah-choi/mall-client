@@ -30,7 +30,13 @@ public class InsertCartController extends HttpServlet {
 		Cart cart = new Cart();
 		cart.setEbookNo(ebookNo);
 		cart.setClientMail(((Client)session.getAttribute("loginClient")).getClientMail());
-		this.cartDao.insertCart(cart);
+		
+		// 카트 안에 동일한 ebook이 존재하는지 확인 코드 추가
+		if(this.cartDao.selectClientMail(cart)) {
+			this.cartDao.insertCart(cart);
+		} else {
+			System.out.println("카트 안에 중복된 상품이 있습니다.");
+		}
 		
 		response.sendRedirect(request.getContextPath()+"/CartListController");
 	}

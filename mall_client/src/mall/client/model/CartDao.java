@@ -1,13 +1,44 @@
 package mall.client.model;
 
-import mall.client.commons.DBUtil;
-import mall.client.vo.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-import java.util.*;
-import java.sql.*;
+import mall.client.commons.DBUtil;
+import mall.client.vo.Cart;
 
 public class CartDao {
 	private DBUtil dbUtil;
+	
+	//
+	public boolean selectClientMail(Cart cart) {
+		// false가 리턴될 경우는 중복되는 데이터가 있는 경우
+		boolean flag = true;
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		// DB 처리
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "SELECT * FROM cart WHERE client_mail = ? AND ebook_no = ?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, cart.getClientMail());
+			stmt.setInt(2, cart.getEbookNo());
+			System.out.println(stmt+"<-- CartDao.selectClientMail의 stmt"); // 디버깅
+			rs = stmt.executeQuery();
+		} catch(Exception e) { // 예외 처리
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, rs);
+		}
+		return flag;
+	}
 	
 	// 장바구니 추가 메소드
 	public int insertCart(Cart cart) {
