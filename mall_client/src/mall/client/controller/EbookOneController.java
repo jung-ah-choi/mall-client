@@ -21,7 +21,7 @@ public class EbookOneController extends HttpServlet {
 		Ebook ebook = this.ebookDao.selectEbookOne(ebookNo);
 		//
 		request.setAttribute("ebook", ebook);
-		request.getRequestDispatcher("/WEB-INF/view/ebook/ebookOne.jsp").forward(request, response);;
+		request.getRequestDispatcher("/WEB-INF/view/ebook/ebookOne.jsp").forward(request, response);
 	}
 
 }
