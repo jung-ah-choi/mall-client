@@ -8,6 +8,30 @@ import mall.client.vo.Client;
 public class ClientDao {
 	private DBUtil dbUtil;
 	
+	// 회원 비밀번호 업데이트 메소드
+	public int updateClientPw(Client client) {
+		// 변수 및 객체 초기화
+		this.dbUtil = new DBUtil();
+		int rowCnt = 0;
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "UPDATE client SET client_pw = PASSWORD(?) WHERE client_mail=?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, client.getClientPw());
+			stmt.setString(2, client.getClientMail());
+			System.out.println(stmt+"<-- ClientDao updateClientPw의 stmt");
+			stmt.executeUpdate();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, null);;
+		}
+		return rowCnt;
+	}
+	
 	// clientOne (회원정보 메소드)
 	public Client selectClientOne(String clientMail) {
 		

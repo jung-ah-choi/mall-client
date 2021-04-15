@@ -31,7 +31,7 @@ if(session.getAttribute("loginClient") == null) {
 			<!-- ClientOneController -> ClientDao.selectclientOne(세션속성안에 clientMail) -> /view/client/clientOne.jsp-->
 			<li><a href="<%=request.getContextPath()%>/ClientOneController">회원정보</a></li>
 			<li><a href="<%=request.getContextPath()%>/DeleteClientController">회원탈퇴</a></li>
-				<li><a href="<%=request.getContextPath()%>/UpdatePasswordController">비밀번호 수정</a></li>
+				<li><a href="<%=request.getContextPath()%>/UpdateClientPwController">비밀번호 수정</a></li>
 			<li><a href="<%=request.getContextPath()%>/LogoutController">로그아웃</a></li>
 		</ul>
 	</div>

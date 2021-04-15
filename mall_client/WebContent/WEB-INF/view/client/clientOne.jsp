@@ -32,7 +32,7 @@
 	</table>
 	<!-- UpdateClientPwController.doGet() forward - updateClientPw.jsp -->
 	<!-- UpdateClientPwController.doPost() - ClientDao.updateClientPw() - session.invalidate() (Controller 안에) - redirect:/IndexController -->
-	<a href=""><button type="button">비밀번호 수정</button></a>
+	<a href="<%=request.getContextPath()%>/UpdateClientPwController"><button type="button">비밀번호 수정</button></a>
 	<!-- DeleteClientController - CartDao.deleteCartByClient(mail),ClientDao.deleteClient() - session.invalidate() (Controller 안에) - redirect:/IndexController -->
 	<a href=""><button type="button">회원탈퇴</button></a>
 </body>

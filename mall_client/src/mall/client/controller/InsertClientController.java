@@ -16,7 +16,7 @@ public class InsertClientController extends HttpServlet {
 	private ClientDao clientDao;
 	// 폼 : C -> V
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// session 검사 (로그인 했는지 안했는지), 로그인 아니면 redirect
+		// session 검사 (로그인을 했을 경우에는 회원가입이 필요 없으니까 Index로 보냄)
 		HttpSession session = request.getSession();
 		if(session.getAttribute("loginClient") != null) {
 			response.sendRedirect(request.getContextPath()+"/IndexController");
