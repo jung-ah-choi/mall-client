@@ -10,9 +10,29 @@ import java.util.Map;
 
 import mall.client.commons.DBUtil;
 import mall.client.vo.Cart;
+import mall.client.vo.Client;
 
 public class CartDao {
 	private DBUtil dbUtil;
+	
+	// 회원 탈퇴 시에 장바구니 목록 삭제
+	public void deleteCartByClient(Client client) {
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "DELETE FROM cart WHERE client_mail =?";
+			stmt = conn.prepareStatement(sql);
+			stmt.setString(1, client.getClientMail());
+			System.out.println(stmt+"<-- CartDao.deleteCartByClient의 stmt");
+			stmt.executeUpdate();			
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, null);
+		}
+	}
 	
 	// 장바구니 목록에 있는 상품 삭제 메소드
 	public int deleteCart (Cart cart) {
