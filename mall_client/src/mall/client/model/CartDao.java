@@ -17,9 +17,12 @@ public class CartDao {
 	
 	// 회원 탈퇴 시에 장바구니 목록 삭제
 	public void deleteCartByClient(Client client) {
+		// 객체 초기화
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		
+		// DB 처리
 		try {
 			conn = this.dbUtil.getConnection();
 			String sql = "DELETE FROM cart WHERE client_mail =?";
@@ -36,10 +39,13 @@ public class CartDao {
 	
 	// 장바구니 목록에 있는 상품 삭제 메소드
 	public int deleteCart (Cart cart) {
+		// 변수 및 객체 초기화
 		int rowCnt = 0; // 0 이면 삭제 안됨, 1 이면 삭제 완료
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		
+		// DB 처리
 		try {
 			conn = this.dbUtil.getConnection();
 			String sql = "DELETE FROM cart WHERE client_mail = ? AND ebook_no = ?";
@@ -58,6 +64,7 @@ public class CartDao {
 	
 	// 장바구니 중복 상품 확인하는 메소드
 	public boolean selectClientMail(Cart cart) {
+		// 변수 및 객체 초기화
 		// false가 리턴될 경우는 중복되는 데이터가 있는 경우
 		boolean flag = true; // true는 중복 없다는 의미
 		this.dbUtil = new DBUtil();
@@ -87,10 +94,13 @@ public class CartDao {
 	
 	// 장바구니 추가 메소드
 	public int insertCart(Cart cart) {
+		// 변수 및 객체 초기화
 		int rowCnt = 0;
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		
+		// DB 구현
 		try {
 			conn = this.dbUtil.getConnection();
 			String sql = "INSERT INTO cart(client_mail, ebook_no, cart_date) VALUES(?, ?, NOW())";
@@ -134,7 +144,6 @@ public class CartDao {
 				map.put("cartDate", rs.getString("cartDate"));
 				list.add(map);
 			}
-			
 		} catch(Exception e) { // 예외 처리
 			e.printStackTrace();
 		} finally {

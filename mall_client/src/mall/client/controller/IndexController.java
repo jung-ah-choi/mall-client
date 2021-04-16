@@ -19,19 +19,63 @@ public class IndexController extends HttpServlet {
 	private EbookDao ebookDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// request 분석
+		// 카테고리별 정렬을 위해 기본값이 null인 변수 선언, view에서 카테고리를 선택하면 그 값으로 설정되게 함
+		String categoryName = null;
+		if(request.getParameter("categoryName") != null) {
+			categoryName = request.getParameter("categoryName");
+		}
+		// 디버깅
+		System.out.println(categoryName+"<-- IndexController의 categoryName");
+		
+		// ebook 검색 기능을 위해 기본값이 null인 변수 선언, view에서 검색어를 입력하면 그 값으로 설정되게 함
+		String searchWord = null;
+		if(request.getParameter("searchWord") != null) {
+			searchWord = request.getParameter("searchWord");
+		}
+		// 디버깅
+		System.out.println(searchWord+"<-- IndexController의 searchWord");
+		
+		// 페이징을 위해서 현재 페이지를 1로 설정, 넘어온 페이지 번호가 존재할 경우에 현재 페이지에 값 넣어주기
 		int currentPage = 1;
 		if(request.getParameter("currentPage") != null) {
 			currentPage = Integer.parseInt(request.getParameter("currentPage"));
 		}
+		// 디버깅
+		System.out.println(currentPage+"<-- IndexController의 currentPage");
+		
+		// 페이지 당 행의 수
 		int rowPerPage = 15;
-		int beginRow = (currentPage - 1)*rowPerPage;
 		
-		// model 호출
+		// 시작 행
+		int beginRow = (currentPage - 1) * rowPerPage;
+		
+		// dao 호출
 		this.ebookDao = new EbookDao();
-		List<Ebook> ebookList = this.ebookDao.selectEbookListByPage(beginRow, rowPerPage);
-		request.setAttribute("ebookList", ebookList);
+		// 전체 행 개수 메소드 호출 및 선언
+		int totalRow = this.ebookDao.totalCount(categoryName, searchWord);
+		// 디버깅
+		System.out.println(totalRow+"<-- IndexController의 totalRow");
 		
-		// View forwarding
+		List<String> categoryList = this.ebookDao.categoryList();
+		
+		List<Ebook> ebookList = null;
+		// view에서 기능 사용에 따라서 ebookList 값을 다르게 복사 (categoryName, searchWord)
+		// 검색어가 없다면,
+		if(searchWord == null) {
+			ebookList = this.ebookDao.selectEbookListByPageAndCategoryName(beginRow, rowPerPage, categoryName);
+		} else { // 검색어가 있다면 두번째 메소드 실행
+			ebookList = this.ebookDao.selectEbookListByPageAndSearchWord(beginRow, rowPerPage, searchWord);
+		}
+		
+		// index.jsp에 값을 보내기 위해 request 객체에 값을 저장하고 View forwarding 
+		request.setAttribute("ebookList", ebookList);
+		request.setAttribute("currentPage", currentPage);
+		request.setAttribute("totalRow", totalRow);
+		request.setAttribute("rowPerPage", rowPerPage);
+		request.setAttribute("categoryList", categoryList);
+		request.setAttribute("categoryName", categoryName);
+		request.setAttribute("searchWord", searchWord);
+		
 		RequestDispatcher rd = request.getRequestDispatcher("/WEB-INF/view/index.jsp");
 		rd.forward(request, response);
 	}

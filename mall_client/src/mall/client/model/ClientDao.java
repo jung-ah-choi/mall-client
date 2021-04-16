@@ -58,15 +58,13 @@ public class ClientDao {
 	
 	// clientOne (회원정보 메소드)
 	public Client selectClientOne(String clientMail) {
-		
-		// 객체 초기화
+		// 변수 및 객체 초기화
+		Client client = null;
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
-		
-		Client client = null;
-		
+
 		try {
 			conn = this.dbUtil.getConnection();
 			String sql = "SELECT client_mail clientMail, client_date clientDate FROM client WHERE client_mail = ?";
@@ -85,14 +83,12 @@ public class ClientDao {
 		} finally { // dbUtil 사용 후 닫아줌
 			this.dbUtil.close(conn, stmt, rs);
 		}
-		
 		return client;
 	}
 	
 	
 	// 회원가입 이메일 중복 검사
 	public String selectClientMail(String clientMail) {
-		
 		// 객체 초기화
 		this.dbUtil = new DBUtil();
 		Connection conn = null;
@@ -116,17 +112,16 @@ public class ClientDao {
 		} finally {
 			this.dbUtil.close(conn, stmt, rs);
 		}
-		
 		return returnClientMail;
 	}
 	
 	// 회원가입 (회원 정보 입력)
 	public int insertClient(Client client) {
-		
 		// 변수 및 객체 초기화
 		int rowCnt = 0;
 		Connection conn = null;
 		PreparedStatement stmt = null;
+		
 		try {
 			conn = this.dbUtil.getConnection();
 			String sql = "INSERT INTO client(client_mail, client_pw, client_date) VALUES (?,PASSWORD(?),NOW())";
@@ -146,7 +141,6 @@ public class ClientDao {
 	
 	// 로그인 정보 가져오는 메소드
 	public Client login(Client client) {
-		
 		// 객체 초기화
 		this.dbUtil = new DBUtil();
 		Client returnClient = null;
@@ -155,7 +149,7 @@ public class ClientDao {
 		ResultSet rs = null;
 		try {
 			conn = this.dbUtil.getConnection();
-			String sql = "SELECT client_mail clientMail FROM client WHERE client_mail=? AND client_pw=PASSWORD(?)";
+			String sql = "SELECT client_no clientNo, client_mail clientMail FROM client WHERE client_mail=? AND client_pw=PASSWORD(?)";
 			stmt = conn.prepareStatement(sql);
 			stmt.setString(1, client.getClientMail());
 			stmt.setString(2, client.getClientPw());
@@ -163,6 +157,7 @@ public class ClientDao {
 			rs = stmt.executeQuery();
 			if(rs.next()) {
 				returnClient = new Client();
+				returnClient.setClientNo(rs.getInt("clientNo"));
 				returnClient.setClientMail(rs.getString("clientMail"));
 			}
 		} catch(Exception e) {
