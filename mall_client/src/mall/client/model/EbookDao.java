@@ -9,6 +9,40 @@ import mall.client.vo.Ebook;
 public class EbookDao {
 	private DBUtil dbUtil;
 	
+	// 캘린더 신간 표시 메소드
+	public List<Map<String, Object>> selectEbookListByMonth(int year, int month) {
+		// 변수 초기화
+		this.dbUtil = new DBUtil();
+		List<Map<String, Object>> list = new ArrayList<>();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		// DB 구현
+		try {
+			conn = this.dbUtil.getConnection();
+			String sql = "SELECT ebook_no ebookNo, ebook_title ebookTitle, DAY(ebook_date) d FROM ebook WHERE YEAR(ebook_date) = ? AND MONTH(ebook_date) = ? ORDER BY DAY(ebook_date) ASC";
+			stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, year);
+			stmt.setInt(2, month);
+			System.out.println(stmt+"<-- EbookDao.selectEbookListByMonth의 stmt");
+			rs = stmt.executeQuery();
+			while (rs.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("ebookNo", rs.getInt("ebookNo"));
+				map.put("ebookTitle", rs.getString("ebookTitle"));
+				map.put("d", rs.getInt("d"));
+				list.add(map);
+			}
+		} catch (Exception e) {
+			// 예외 발생 시 시스템을 멈추고, 함수(메소드)호출스택구조를 그대로 콘솔에 출력함
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, rs);
+		}
+		return list;
+	}
+	
 	// ebook 목록 + 검색 기능
 	public List<Ebook> selectEbookListByPageAndSearchWord(int beginRow, int rowPerPage, String searchWord) {
 		// 변수 초기화

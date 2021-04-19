@@ -16,6 +16,7 @@ if(session.getAttribute("loginClient") == null) {
 	<ul>
 		<!-- InsertClientController -> /view/insertClient.jsp -->
 		<li><a href="<%=request.getContextPath()%>/InsertClientController">회원가입</a></li>
+		<li><a href="<%=request.getContextPath()%>/EbookCalendarController">ebook 달력</a></li>
 	</ul>
 <%
 } else {
@@ -35,6 +36,7 @@ if(session.getAttribute("loginClient") == null) {
 			<li><a href="<%=request.getContextPath()%>/DeleteClientController">회원탈퇴</a></li>
 				<li><a href="<%=request.getContextPath()%>/UpdateClientPwController">비밀번호 수정</a></li>
 			<li><a href="<%=request.getContextPath()%>/LogoutController">로그아웃</a></li>
+			<li><a href="<%=request.getContextPath()%>/EbookCalendarController">ebook 달력</a></li>
 		</ul>
 	</div>
 <%
