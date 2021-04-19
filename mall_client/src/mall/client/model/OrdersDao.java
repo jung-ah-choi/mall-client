@@ -9,6 +9,50 @@ import mall.client.vo.Orders;
 public class OrdersDao {
 	private DBUtil dbUtil;
 	
+	// 베스트 셀러 메소드
+	public List<Map<String, Object>> selectBestOrdersList () {
+		// 변수 및 객체 초기화
+		List<Map<String, Object>> list = new ArrayList<>();
+		this.dbUtil = new DBUtil();
+		Connection conn = null;
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+		
+		// DB 처리
+		try {
+			conn = this.dbUtil.getConnection();
+			// 쿼리 띄어쓰기 잘 하기!, 표현 익히기
+			String sql = "SELECT t.ebook_no ebookNo, t.cnt cnt, e.ebook_title ebookTitle, e.ebook_price ebookPrice"
+							+ " FROM"
+								// 쿼리 안에 있는 쿼리 (서브쿼리)
+								+ "	(SELECT ebook_no, COUNT(ebook_no) cnt"
+								+ "	FROM orders"
+								+ "	WHERE orders_state = '주문완료'"
+								+ "	GROUP BY ebook_no" // group by 키워드로 동일한 값들을 집계할 수 있음
+								+ "	HAVING COUNT(ebook_no) > 0"
+								+ "	LIMIT 5) t INNER JOIN ebook e" // 5개만 출력함 (LIMIT 절)
+						+ " ON t.ebook_no = e.ebook_no"
+						+ " ORDER BY cnt DESC"; // 많이 담긴 순서대로 출력
+			stmt = conn.prepareStatement(sql);
+			System.out.println(stmt+"<-- OrdersDao.selectBestOrdersList의 stmt");
+			rs = stmt.executeQuery();
+			while(rs.next()) {
+				Map<String, Object> map = new HashMap<>();
+				map.put("ebookNo", rs.getInt("ebookNo"));
+				map.put("cnt", rs.getInt("cnt"));
+				map.put("ebookTitle", rs.getString("ebookTitle"));
+				map.put("ebookPrice", rs.getInt("ebookPrice"));
+				list.add(map);
+			}
+		} catch(Exception e) {
+			e.printStackTrace();
+		} finally {
+			this.dbUtil.close(conn, stmt, rs);
+		}
+		return list;
+	}
+	
+	// 장바구니 목록 메소드
 	public List<Map<String, Object>> selectOrderListByClient(int clientNo) {
 		// 변수 및 객체 초기화
 		List<Map<String, Object>> list = new ArrayList<>();

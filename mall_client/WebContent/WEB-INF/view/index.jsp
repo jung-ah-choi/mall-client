@@ -9,9 +9,10 @@
 </head>
 <body>
 <%
-	// IndexController에서 ebookList, categoryList 값 받아오기
+	// IndexController에서 ebookList, categoryList, bestOrdersList 값 받아오기 (형변환 해주기)
 	List<Ebook> ebookList = (List<Ebook>)(request.getAttribute("ebookList"));
 	List<String> categoryList = (List<String>)(request.getAttribute("categoryList"));
+	List<Map<String, Object>> bestOrdersList = (List<Map<String, Object>>)(request.getAttribute("bestOrdersList"));
 %>
 	<!-- mainMenu -->
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
@@ -20,11 +21,12 @@
 	<!-- 캘린더(이번달에 나온 책들) -->
 	<!-- 베스트셀러(주문량) -->
 	<!-- 메뉴2 카테고리 -->
-	<h1>index</h1>
-	<!-- 카테고리 네비게이션 메뉴 -->
+	
+	<!-- Ebook List의 카테고리 네비게이션 메뉴 -->
 	<div>
 		<!-- 전체 상품 출력 -->
 		<a href="<%=request.getContextPath()%>/IndexController">All</a>	
+		
 		<!-- 카테고리 출력 -->
 		<%
 			for(String e : categoryList) {
@@ -35,7 +37,31 @@
 		%>
 	</div>
 	
+	<!-- best ebook 목록 (상품 5개 출력) -->
+	<h3>Best Ebook</h3>
+	<table border="1">
+		<tr>
+			<%
+				for(Map<String, Object> m : bestOrdersList) {
+			%>
+					<td>
+						<div><img src="<%=request.getContextPath()%>/img/default.jpg"></div>
+						<!-- EbookOneController로 ebookNo 넘겨줌 -->
+						<div>
+							<a href="<%=request.getContextPath()%>/EbookOneController?ebookNo=<%=m.get("ebookNo")%>">
+								<%=m.get("ebookTitle")%>
+							</a>
+						</div>
+						<div>￦<%=m.get("ebookPrice")%></div>
+					</td>
+			<%
+				}
+			%>
+		</tr>
+	</table>
+	
 	<!-- ebook 목록 테이블 -->
+	<h3>Ebook List</h3>
 	<table border="1">
 		<tr>
 		<%
@@ -67,7 +93,7 @@
 	
 	<!-- 페이징 (이전, 다음) 버튼 만들기 + 페이징 숫자 나오게 하기 + 카테고리별로 눌렀을 때 조건문으로 구분 -->
 		<% 
-			// 변수 받아오기 (IndexController)
+			// 변수 받아오기 (IndexController), 형변환
 			int currentPage = (int)(request.getAttribute("currentPage"));
 			int rowPerPage = (int)(request.getAttribute("rowPerPage"));
 			int totalRow = (int)(request.getAttribute("totalRow"));
@@ -80,7 +106,7 @@
 		%>
 					<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>">이전</a>
 		<%
-				} else { // 카테고리를 선택했다면
+				} else { // 카테고리 메뉴를 선택했다면
 		%>			
 					<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>">이전</a>
 		<%
@@ -96,21 +122,21 @@
 			}
 				
 			if(currentPage < lastPage) { // 마지막 페이지에서 다음 버튼이 안 보이게 함
-				if(categoryName == null) {
+				if(categoryName == null) { // 카테고리 메뉴를 선택하지 않았다면
 		%>
 					<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>">다음</a>
 		<%
-				} else {
+				} else { // 카테고리 메뉴를 선택했다면
 		%>
 					<a href="<%=request.getContextPath()%>/IndexController?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>&categoryName=<%=categoryName%>">다음</a>
 		<%
-					}
+				}
 			}
 		%>
 	<!-- 페이징 끝! -->
 	
 	<!-- 검색기능 -->
-	<form method="get" action="<%=request.getContextPath()%>/IndexController">
+	<form action="<%=request.getContextPath()%>/IndexController" method="get">
 		ebookTitle:
 		<input type="text" name="searchWord">
 		<button type="submit">검색</button>
