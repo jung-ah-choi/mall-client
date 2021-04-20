@@ -35,27 +35,57 @@ public class EbookCalendarController extends HttpServlet {
 		int currentMonth = dday.get(Calendar.MONTH) + 1; // 0부터 시작하기 때문에 1을 더해줌
 		
 		// 월의 마지막 일을 구하는 메소드
-		int endDayOfMonth = dday.getActualMaximum(Calendar.DAY_OF_MONTH);
+		int endDay = dday.getActualMaximum(Calendar.DAY_OF_MONTH);
 		
 		// 현재 달의 1일의 요일
 		Calendar firstDay = Calendar.getInstance();
 		firstDay.set(Calendar.YEAR, currentYear);
 		firstDay.set(Calendar.MONTH, currentMonth-1);
 		firstDay.set(Calendar.DATE, 1);
-		int fisrtDayOfWeek = firstDay.get(Calendar.DAY_OF_WEEK);
+		int firstDayOfWeek = firstDay.get(Calendar.DAY_OF_WEEK);
 		
 		System.out.println(currentYear+"<-- EbookCalendarController의 currentYear");
 		System.out.println(currentMonth+"<-- EbookCalendarController의 currentMonth");
-		System.out.println(endDayOfMonth+"<-- EbookCalendarController의 endDayOfMonth");
-		System.out.println(fisrtDayOfWeek + "<-- 4/1은 목요일(5 출력)");
+		System.out.println(endDay+"<-- EbookCalendarController의 endDay");
+		System.out.println(firstDayOfWeek + "<-- 4/1은 목요일(5 출력)");
 		
 		List<Map<String, Object>> ebookListByMonth = this.ebookDao.selectEbookListByMonth(currentYear, currentMonth);
 		
-		request.setAttribute("ebookListByMonth", ebookListByMonth);
+		// 이전달, 다음달, 연도 출력을 위한 메소드
+		int preYear = currentYear;
+		int preMonth = currentMonth - 1;
+		if(preMonth == 0) {
+			preMonth = 12;
+			preYear -= 1;
+		}
+		
+		int nextYear = currentYear;
+		int nextMonth = currentMonth + 1;
+		if(nextMonth == 13) {
+			nextMonth = 1;
+			nextYear += 1;
+		}
+		
+		request.setAttribute("preYear", preYear);
+		request.setAttribute("preMonth", preMonth);
 		request.setAttribute("currentYear", currentYear);
 		request.setAttribute("currentMonth", currentMonth);
-		request.setAttribute("endDayOfMonth", endDayOfMonth);
-		request.setAttribute("fisrtDayOfWeek", fisrtDayOfWeek);
+		request.setAttribute("nextYear", nextYear);
+		request.setAttribute("nextMonth", nextMonth);
+		
+		request.setAttribute("ebookListByMonth", ebookListByMonth);
+		request.setAttribute("endDay", endDay);
+		request.setAttribute("firstDayOfWeek", firstDayOfWeek);
+		
+		System.out.println(preYear);
+		System.out.println(preMonth);
+		System.out.println(currentYear);
+		System.out.println(currentMonth);
+		System.out.println(nextYear);
+		System.out.println(nextMonth);
+		System.out.println(ebookListByMonth);
+		System.out.println(endDay);
+		System.out.println(firstDayOfWeek);
 		
 		// view forwarding
 		request.getRequestDispatcher("/WEB-INF/view/ebook/ebookCalendar.jsp").forward(request, response);

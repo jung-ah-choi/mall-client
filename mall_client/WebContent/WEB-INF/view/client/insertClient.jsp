@@ -10,7 +10,7 @@
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	
 	<h1>회원가입</h1>
-		<form method = "post" action = "<%=request.getContextPath()%>/InsertClientController">
+		<form method = "post" action = "${pageContext.request.contextPath}/InsertClientController">
 			<table>
 				<thead>
 					<tr>

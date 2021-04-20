@@ -1,5 +1,4 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="mall.client.vo.*" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,10 +6,6 @@
 <title>clientOne</title>
 </head>
 <body>
-<%
-	// 형변환
-	Client clientOne = (Client)(request.getAttribute("clientOne"));
-%>	
 	<!-- mainMenu -->
 	<jsp:include page="/WEB-INF/view/inc/mainMenu.jsp"></jsp:include>
 	
@@ -25,15 +20,15 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td><%=clientOne.getClientMail()%></td>
-				<td><%=clientOne.getClientDate()%></td>
+				<td>${clientOne.clientMail}</td>
+				<td>${clientOne.clientDate}</td>
 			</tr>
 		</tbody>
 	</table>
 	<!-- UpdateClientPwController.doGet() forward - updateClientPw.jsp -->
 	<!-- UpdateClientPwController.doPost() - ClientDao.updateClientPw() - session.invalidate() (Controller 안에) - redirect:/IndexController -->
-	<a href="<%=request.getContextPath()%>/UpdateClientPwController"><button type="button">비밀번호 수정</button></a>
+	<a href="${pageContext.request.contextPath}/UpdateClientPwController"><button type="button">비밀번호 수정</button></a>
 	<!-- DeleteClientController - CartDao.deleteCartByClient(mail),ClientDao.deleteClient() - session.invalidate() (Controller 안에) - redirect:/IndexController -->
-	<a href="<%=request.getContextPath()%>/DeleteClientController"><button type="button">회원탈퇴</button></a>
+	<a href="${pageContext.request.contextPath}/DeleteClientController"><button type="button">회원탈퇴</button></a>
 </body>
 </html>

@@ -11,7 +11,7 @@
 	
 	<!-- updateClientPw -->
 	<h1>비밀번호 변경</h1>
-	<form method = "post" action="<%=request.getContextPath()%>/UpdateClientPwController">
+	<form method = "post" action="${pageContext.request.contextPath}/UpdateClientPwController">
 		<table>
 			<tr>
 				<th>새로운 비밀번호</th>
