@@ -46,6 +46,9 @@ public class IndexController extends HttpServlet {
 		// 변수 선언
 		// 페이지 당 행의 수
 		int rowPerPage = 15;
+		if(request.getParameter("rowPerPage") != null) {
+			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage"));
+		}
 		
 		// 시작 행
 		int beginRow = (currentPage - 1) * rowPerPage;

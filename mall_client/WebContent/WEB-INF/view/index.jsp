@@ -26,6 +26,21 @@
 		</c:forEach>
 	</div>
 	
+	<!-- 한 페이지 당 ~개씩 보기 선택 -->
+	<form action="${pageContext.request.contextPath}/IndexController" method="get">
+		<select name="rowPerPage">
+			<c:forEach var="i" begin="15" end="30" step="5">
+				<c:if test="${rowPerPage == i}">
+					<option value="${i}" selected="selected">${i}개씩</option>
+				</c:if>
+				<c:if test="${rowPerPage != i}">
+					<option value="${i}">${i}개씩</option>
+				</c:if>
+			</c:forEach>
+		</select>
+		<button type="submit">보기</button>
+	</form>
+	
 	<!-- best ebook 목록 (상품 5개 출력) -->
 	<h3>Best Ebook</h3>
 	<table border="1">

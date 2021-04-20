@@ -36,22 +36,30 @@
 		<tr>
 			<!-- 공백 + endDay 만큼 td가 필요 -->
 			<c:forEach var="i" begin="1" end="${endDay+(firstDayOfWeek-1)}" step="1">
+				<!-- i-firstDayOfWeek+1 
+				예시) 4/1은 목요일(5), 테이블은 일요일부터 순차적으로 출력
+				4/1에 해당하는 i 값은 5, i-firstDayOfWeek만 하면 0이 출력, 1일 값으로 맞춰주기 위해서 1을 더해줌 -->
+				
+				<!-- 1일 전의 값들은 공백 출력 -->
 				<c:if test="${i-(firstDayOfWeek-1) <= 0}">
 					<td>&nbsp;</td>
 				</c:if>
+				
+				<!-- 1일부터 출력 -->
 				<c:if test="${i-(firstDayOfWeek-1) > 0}">
-					<td>${i-(firstDayOfWeek-1)}</td>
+					<td>${i-(firstDayOfWeek-1)}</td> 
 				</c:if>
 				
-				<!-- 토요일 숫자값은 7이므로, 날짜 요일 값을 7로 나눈 나머지가 0이라면 토요일이라는 의미! -->
-				<!-- 날짜가 토요일 일 때마다, 다음 행으로 넘겨주는 메소드 -->
+				<!-- 날짜가 토요일 일때마다 다음 행으로 넘겨줌 -->
 				<c:if test="${i%7 == 0}">
 					</tr><tr>
 				</c:if>
 			</c:forEach>
 			
-			<!-- td 반복 후(endDay까지), 채워지지 않은 자리가 있다면 공백을 채워줌 -->
+			<!-- td 반복 후(end까지), 채워지지 않은 자리가 있다면 공백을 채워줌 -->
+			<!-- end가 토요일 자리에 없다면 -->
 			<c:if test="${(endDay+(firstDayOfWeek-1)) % 7 != 0}">
+				<!-- 출력이 끝나고 남은 자리에 빈칸을 채워줌 -->
 				<c:forEach begin="1" end="${7-((endDay+(firstDayOfWeek-1)) % 7)}" step="1">
 					<td>&nbsp;</td>
 				</c:forEach>
