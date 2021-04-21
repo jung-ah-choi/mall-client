@@ -13,13 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import mall.client.model.EbookDao;
 import mall.client.model.OrdersDao;
+import mall.client.model.StatsDao;
 import mall.client.vo.Ebook;
+import mall.client.vo.Stats;
 
 // C -> M -> V
 @WebServlet("/IndexController")
 public class IndexController extends HttpServlet {
 	private OrdersDao ordersDao;
 	private EbookDao ebookDao;
+	private StatsDao statsDao;
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// request 분석
 		// 카테고리별 정렬을 위해 기본값이 null인 변수 선언, view에서 카테고리를 선택하면 그 값으로 설정되게 함
@@ -80,7 +83,19 @@ public class IndexController extends HttpServlet {
 			ebookList = this.ebookDao.selectEbookListByPageAndSearchWord(beginRow, rowPerPage, searchWord);
 		}
 		
+		// 접속자 관련 데이터
+		this.statsDao = new StatsDao();
+		long total = this.statsDao.selectStatsTotal();
+		Stats stats = this.statsDao.selectStatsByToday();
+		long statsCount = 0;
+		if(stats != null) {
+			statsCount = stats.getStatsCount();
+		}
+		
+		
 		// index.jsp에 값을 보내기 위해 request 객체에 값을 저장함  
+		request.setAttribute("total", total);
+		request.setAttribute("statsCount", statsCount);
 		request.setAttribute("bestOrdersList", bestOrdersList);
 		request.setAttribute("ebookList", ebookList);
 		request.setAttribute("currentPage", currentPage);

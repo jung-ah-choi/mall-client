@@ -24,7 +24,6 @@ public class LoginController extends HttpServlet {
 		}
 		
 		// 인코딩 및 변수 초기화
-		request.setCharacterEncoding("utf-8");
 		String clientMail = request.getParameter("clientMail");
 		String clientPw = request.getParameter("clientPw");
 		Client client = new Client();
